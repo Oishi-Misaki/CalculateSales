@@ -172,10 +172,6 @@ public class CalculateSales {
 		for(File fl : directryList){
 			String fileName = fl.getName();
 			if(fileName.matches(index) && fl.isFile()){
-				if(!fl.isFile()){
-					System.out.println("売上ファイル名が連番になっていません");
-					return null ;
-				}
 				searchedFile.add(fl);
 				nums.add(Integer.parseInt(fileName.split("\\.")[0]));
 			}
@@ -231,16 +227,20 @@ public class CalculateSales {
 					return false;
 				}
 
-				branchTatalSaleMap.put(st.get(0), branchTatalSaleMap.get(st.get(0)) + Long.parseLong(st.get(2)));
-				if(!branchTatalSaleMap.get(st.get(0)).toString().matches("^\\d{1,10}$")){
+				Long branchTotalSaleSum = branchTatalSaleMap.get(st.get(0)) + Long.parseLong(st.get(2));
+				if(!branchTotalSaleSum.toString().matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return false;
 				}
-				commodityTatalSaleMap.put(st.get(1), commodityTatalSaleMap.get(st.get(1)) + Long.parseLong(st.get(2)));
-				if(!commodityTatalSaleMap.get(st.get(1)).toString().matches("^\\d{1,10}$")){
+				branchTatalSaleMap.put(st.get(0),branchTotalSaleSum);
+
+				Long commodityTotalSaleSum = branchTatalSaleMap.get(st.get(0)) + Long.parseLong(st.get(2));
+				if(!commodityTotalSaleSum.toString().matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return false;
 				}
+				commodityTatalSaleMap.put(st.get(1), commodityTotalSaleSum);
+
 			}catch(IOException e){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
