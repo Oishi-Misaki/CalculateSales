@@ -1,4 +1,4 @@
-package jp.alhinc.oishi_misaki_Calculate_Sales;
+package jp.alhinc.oishi_misaki_calculate_sales;
 /*
  * 最終更新：2017/4/25
  * 作業者：大石岬
