@@ -94,7 +94,7 @@ public class CalculateSales {
 			String s;
 			while((s = br.readLine()) != null){
 				String[] CodeAndName = s.split(",");
-				if(CodeAndName.length != 2 && !CodeAndName[0].matches("\\d{3}$") && CodeAndName[1].isEmpty()){
+				if(CodeAndName.length != 2 || !CodeAndName[0].matches("\\d{3}$") || CodeAndName[1].isEmpty()){
 					System.out.println("支店定義ファイルのフォーマットが不正です");
 					return null ;
 				}
@@ -143,7 +143,7 @@ public class CalculateSales {
 			String s;
 			while((s = br.readLine()) != null){
 				String[] CodeAndName = s.split(",");
-				if(CodeAndName.length != 2 && !CodeAndName[0].matches("^[0-9a-zA-Z]{8}$") && CodeAndName[1].isEmpty()){
+				if(CodeAndName.length != 2 || !CodeAndName[0].matches("^[0-9a-zA-Z]{8}$") || CodeAndName[1].isEmpty()){
 					System.out.println("商品定義ファイルのフォーマットが不正です");
 					return null;
 				}
@@ -170,12 +170,8 @@ public class CalculateSales {
 		List<File> searchedFile = new ArrayList<>();
 		List<Integer> nums = new ArrayList<>();
 		for(File fl : directryList){
-			if(!fl.isFile()){
-				System.out.println("売上ファイル名が連番になっていません");
-				return null;
-			}
 			String fileName = fl.getName();
-			if(fileName.matches(index)){
+			if(fileName.matches(index) && fl.isFile()){
 				searchedFile.add(fl);
 				nums.add(Integer.parseInt(fileName.split("\\.")[0]));
 			}
@@ -214,7 +210,7 @@ public class CalculateSales {
 				while((s=br.readLine()) != null){
 					st.add(s);
 				}
-				if(st.size() != 3 && !st.get(0).matches("^\\d{3}$") && !st.get(1).matches("^[0-9a-zA-Z]{8}$") && !st.get(2).matches("^\\d{1,10}$")){
+				if(st.size() != 3 || !st.get(0).matches("^\\d{3}$") || !st.get(1).matches("^[0-9a-zA-Z]{8}$") || !st.get(2).matches("^\\d{1,10}$")){
 					System.out.println(fl.getName() + "のフォーマットが不正です");
 					return false;
 				}
