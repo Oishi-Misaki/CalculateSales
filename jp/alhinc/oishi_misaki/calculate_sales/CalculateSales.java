@@ -167,12 +167,12 @@ public class CalculateSales {
 	public static List<File> searchFile(File Directry){
 		List<File> directryList = Arrays.asList(Directry.listFiles());
 		String index = "^\\d{8}.rcd$";
-		List<File> searchedFile = new ArrayList<>();
+		List<File> searchedFileList = new ArrayList<>();
 		List<Integer> nums = new ArrayList<>();
 		for(File fl : directryList){
 			String fileName = fl.getName();
 			if(fileName.matches(index) && fl.isFile()){
-				searchedFile.add(fl);
+				searchedFileList.add(fl);
 				nums.add(Integer.parseInt(fileName.split("\\.")[0]));
 			}
 		}
@@ -183,7 +183,7 @@ public class CalculateSales {
 			System.out.println("売上ファイル名が連番になっていません");
 			return null ;
 		}
-		return searchedFile;
+		return searchedFileList;
 	}
 	/*
 	 * ファイル読込・加算
@@ -193,53 +193,53 @@ public class CalculateSales {
 	 *@param 商品定義
 	 *@param 商品別売上合計
 	 */
-	public static boolean readBranchSaleFileAndSum(List<File> numsfile,HashMap<String, String> branchCodeAndNameMap, HashMap<String, String> commodityCodeAndNameMap,
+	public static boolean readBranchSaleFileAndSum(List<File> searchedFileList,HashMap<String, String> branchCodeAndNameMap, HashMap<String, String> commodityCodeAndNameMap,
 			HashMap<String, Long>branchTatalSaleMap, HashMap<String, Long> commodityTatalSaleMap) throws IOException{
 
 		BufferedReader br = null;
-		for(File fl : numsfile){
-			if(!fl.exists()){
+		for(File searchedFile : searchedFileList){
+			if(!searchedFile.exists()){
 				System.out.println("予期せぬエラーが発生しました");
 				return false;
 			}
 			try{
-				FileReader fr = new FileReader(fl);
+				FileReader fr = new FileReader(searchedFile);
 				br = new BufferedReader(fr);
 				String s;
-				List<String> st = new ArrayList<>();
+				List<String> readLineSearchdFile = new ArrayList<>();
 				while((s=br.readLine()) != null){
-					st.add(s);
+					readLineSearchdFile.add(s);
 				}
-				if(st.size() != 3 || !st.get(0).matches("^\\d{3}$") || !st.get(1).matches("^[0-9a-zA-Z]{8}$")){
-					System.out.println(fl.getName() + "のフォーマットが不正です");
+				if(readLineSearchdFile.size() != 3 || !readLineSearchdFile.get(0).matches("^\\d{3}$") || !readLineSearchdFile.get(1).matches("^[0-9a-zA-Z]{8}$")){
+					System.out.println(searchedFile.getName() + "のフォーマットが不正です");
 					return false;
 				}
-				if(!st.get(2).matches("^\\d{1,10}$")){
+				if(!readLineSearchdFile.get(2).matches("^\\d{1,10}$")){
 					System.out.println("予期せぬエラーが発生しました");
 					return false;
 				}
-				if(!branchCodeAndNameMap.containsKey(st.get(0))){
-					System.out.println(fl.getName() + "の支店コードが不正です");
+				if(!branchCodeAndNameMap.containsKey(readLineSearchdFile.get(0))){
+					System.out.println(searchedFile.getName() + "の支店コードが不正です");
 					return false;
 				}
-				if(!commodityCodeAndNameMap.containsKey(st.get(1))){
-					System.out.println(fl.getName() + "の商品コードが不正です");
+				if(!commodityCodeAndNameMap.containsKey(readLineSearchdFile.get(1))){
+					System.out.println(searchedFile.getName() + "の商品コードが不正です");
 					return false;
 				}
 
-				Long branchTotalSaleSum = branchTatalSaleMap.get(st.get(0)) + Long.parseLong(st.get(2));
+				Long branchTotalSaleSum = branchTatalSaleMap.get(readLineSearchdFile.get(0)) + Long.parseLong(readLineSearchdFile.get(2));
 				if(!branchTotalSaleSum.toString().matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return false;
 				}
-				branchTatalSaleMap.put(st.get(0),branchTotalSaleSum);
+				branchTatalSaleMap.put(readLineSearchdFile.get(0),branchTotalSaleSum);
 
-				Long commodityTotalSaleSum = branchTatalSaleMap.get(st.get(0)) + Long.parseLong(st.get(2));
+				Long commodityTotalSaleSum = branchTatalSaleMap.get(readLineSearchdFile.get(0)) + Long.parseLong(readLineSearchdFile.get(2));
 				if(!commodityTotalSaleSum.toString().matches("^\\d{1,10}$")){
 					System.out.println("合計金額が10桁を超えました");
 					return false;
 				}
-				commodityTatalSaleMap.put(st.get(1), commodityTotalSaleSum);
+				commodityTatalSaleMap.put(readLineSearchdFile.get(1), commodityTotalSaleSum);
 
 			}catch(IOException e){
 				System.out.println("予期せぬエラーが発生しました");
