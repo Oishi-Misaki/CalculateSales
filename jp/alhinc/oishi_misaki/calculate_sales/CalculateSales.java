@@ -214,8 +214,12 @@ public class CalculateSales {
 				while((s=br.readLine()) != null){
 					st.add(s);
 				}
-				if(st.size() != 3 || !st.get(0).matches("^\\d{3}$") || !st.get(1).matches("^[0-9a-zA-Z]{8}$") || !st.get(2).matches("^\\d{1,10}$")){
+				if(st.size() != 3 || !st.get(0).matches("^\\d{3}$") || !st.get(1).matches("^[0-9a-zA-Z]{8}$")){
 					System.out.println(fl.getName() + "のフォーマットが不正です");
+					return false;
+				}
+				if(!st.get(2).matches("^\\d{1,10}$")){
+					System.out.println("予期せぬエラーが発生しました");
 					return false;
 				}
 				if(!branchCodeAndNameMap.containsKey(st.get(0))){
