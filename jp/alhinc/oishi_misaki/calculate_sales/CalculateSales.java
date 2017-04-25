@@ -172,6 +172,10 @@ public class CalculateSales {
 		for(File fl : directryList){
 			String fileName = fl.getName();
 			if(fileName.matches(index) && fl.isFile()){
+				if(!fl.isFile()){
+					System.out.println("売上ファイル名が連番になっていません");
+					return null ;
+				}
 				searchedFile.add(fl);
 				nums.add(Integer.parseInt(fileName.split("\\.")[0]));
 			}
